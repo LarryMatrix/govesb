@@ -6,6 +6,7 @@ setup(
     packages=find_packages(),
     install_requires=[],
     author="Lawrance Massanja",
+    author_email="massanjal4@gmail.com",
     description="A Python library for supporting GovESB Integration",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
