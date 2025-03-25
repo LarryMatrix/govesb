@@ -7,8 +7,8 @@ from xml.etree import ElementTree as ET
 from dataclasses import asdict
 
 from govesb.crypto.ecc import ECC
-# from govesb.crypto.rsa import RSAHelper
-from .token_service import GovESBTokenService
+from govesb.crypto.rsa import RSAHelper
+from govesb.services.token_service import GovESBTokenService
 from govesb.models.data import (
     TokenResponse, CryptoData, ESBRequest, ESBResponse,
     RequestData, ResponseData
