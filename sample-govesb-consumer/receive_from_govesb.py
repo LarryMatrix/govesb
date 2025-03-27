@@ -1,7 +1,7 @@
 import requests
-from govesb import DataFormatEnum
-from govesb.services.esb_helper import ESBHelper
-
+from govesb.esb import (
+    DataFormatEnum, ESBHelper
+)
 
 destination_scheme = "https"
 destination_host = "jsonplaceholder.typicode.com"
@@ -26,7 +26,6 @@ sample_data = '''
 
 responseData = ESBHelper.verify_and_extract_data(sample_data, DataFormatEnum.JSON, govesb_public_key)
 
-# print("responseData", responseData)
 
 if responseData.has_data and responseData is None:
     print("Signature Verification Failed")
