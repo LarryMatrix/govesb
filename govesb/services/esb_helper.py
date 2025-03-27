@@ -15,6 +15,7 @@ from govesb.models.data import (
 )
 
 from govesb.models.enums import DataFormatEnum, ModeOfConnection
+from govesb.utils.json_fixer import JsonFixer
 
 logger = logging.getLogger(__name__)
 T = TypeVar("T")
@@ -40,7 +41,7 @@ class ESBHelper:
         else:
             json_data = esb_body
 
-        if format == DataFormatEnum.xml:
+        if format == DataFormatEnum.XML:
             xml_body = xmltodict.unparse({"root": json.loads(json_data)})
             request_payload = ESBHelper.create_signed_request(api_code, access_token, xml_body, format, key)
         else:
@@ -50,12 +51,13 @@ class ESBHelper:
         return response.text
 
     @staticmethod
-    def create_signed_request(api_code: str, access_token: str, body: str, format: DataFormatEnum, key: str, mode=ModeOfConnection.PULL) -> str:
+    def create_signed_request(api_code: str, access_token: str, body: str,
+                              format: DataFormatEnum, key: str, mode=ModeOfConnection.PULL) -> str:
         req = ESBRequest(
             apiCode=api_code if mode == ModeOfConnection.PULL else None,
             pushCode=api_code if mode == ModeOfConnection.PUSH else None,
             authorization=access_token,
-            esbBody=body if format == DataFormatEnum.xml else json.loads(body)
+            esbBody=body if format == DataFormatEnum.XML else json.loads(body)
         )
         payload = json.dumps(asdict(req))
 
@@ -64,7 +66,7 @@ class ESBHelper:
 
         if format == DataFormatEnum.JSON:
             return json.dumps(asdict(signed))
-        elif format == DataFormatEnum.xml:
+        elif format == DataFormatEnum.XML:
             xml_obj = {"esbrequest": {"data": req.esbBody, "signature": signature}}
             return xmltodict.unparse(xml_obj)
         else:
@@ -75,10 +77,13 @@ class ESBHelper:
         response = ResponseData()
 
         try:
-            if format == DataFormatEnum.json:
-                parsed = json.loads(received_data)
-                data = json.dumps(parsed["data"])
-                signature = parsed["signature"]
+            if format == DataFormatEnum.JSON:
+                safe_json_string = JsonFixer.fix_and_parse_json(received_data)
+                # data = safe_json_string['data']
+
+                data = json.dumps(safe_json_string, separators=(',', ':'), sort_keys=True)
+
+                signature = safe_json_string['signature']
             else:
                 parsed = xmltodict.parse(received_data)
                 data = xmltodict.unparse({"data": parsed["esbrequest"]["data"]})
@@ -94,6 +99,7 @@ class ESBHelper:
                 response.message = "Failed to verify data"
 
         except Exception as e:
+            print('exception', e)
             logger.error(f"Verification failed: {e}")
             response.has_data = False
             response.message = str(e)
@@ -103,7 +109,7 @@ class ESBHelper:
     @staticmethod
     def create_response(esb_body: str, format: DataFormatEnum, key: str, is_success: bool, message: str) -> str:
         response = ESBResponse(
-            esbBody=json.loads(esb_body) if format == DataFormatEnum.json else esb_body,
+            esbBody=json.loads(esb_body) if format == DataFormatEnum.JSON else esb_body,
             isSuccess=is_success,
             message=message
         )
@@ -112,7 +118,7 @@ class ESBHelper:
         signature = ECC.sign_payload(payload, key)
         crypto_data = CryptoData(data=response.esbBody, signature=signature)
 
-        if format == DataFormatEnum.json:
+        if format == DataFormatEnum.JSON:
             return json.dumps(asdict(crypto_data))
         else:
             return xmltodict.unparse({"esbresponse": {"data": response.esbBody, "signature": signature}})

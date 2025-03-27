@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Generic, Optional, TypeVar, Any
-from govesb.models.enums import DataFormatEnum
+from ..models.enums import DataFormatEnum
 
 
 # @dataclass

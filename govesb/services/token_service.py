@@ -1,7 +1,7 @@
 import base64
 import logging
 import requests
-from govesb.models.data import TokenResponse
+from ..models.data import TokenResponse
 
 logger = logging.getLogger(__name__)
 

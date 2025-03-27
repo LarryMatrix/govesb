@@ -7,6 +7,7 @@ from cryptography.hazmat.primitives.serialization import (
     load_pem_public_key,
 )
 from cryptography.exceptions import InvalidSignature
+from cryptography.hazmat.primitives.serialization import load_der_public_key
 
 logger = logging.getLogger(__name__)
 
@@ -29,19 +30,44 @@ class ECC:
             logger.error("Error signing payload: %s", e)
             raise
 
+    # @staticmethod
+    # def verify_payload(data: str, signature_str: str, public_key_str: str) -> bool:
+    #     try:
+    #         public_key_bytes = base64.b64decode(public_key_str)
+    #         public_key = load_pem_public_key(public_key_bytes)
+    #         signature = base64.b64decode(signature_str)
+    #
+    #         public_key.verify(
+    #             signature,
+    #             data.encode('utf-8'),
+    #             ec.ECDSA(hashes.SHA256())
+    #         )
+    #         return True
+    #     except InvalidSignature:
+    #         return False
+    #     except Exception as e:
+    #         logger.error("Error verifying signature: %s", e)
+    #         return False
+
     @staticmethod
     def verify_payload(data: str, signature_str: str, public_key_str: str) -> bool:
         try:
+            # Decode the base64-encoded DER public key
             public_key_bytes = base64.b64decode(public_key_str)
-            public_key = load_pem_public_key(public_key_bytes)
+            public_key = load_der_public_key(public_key_bytes)
+
+            # Decode the base64-encoded signature
             signature = base64.b64decode(signature_str)
 
+            # Verify signature
             public_key.verify(
                 signature,
                 data.encode('utf-8'),
                 ec.ECDSA(hashes.SHA256())
             )
+
             return True
+
         except InvalidSignature:
             return False
         except Exception as e:
