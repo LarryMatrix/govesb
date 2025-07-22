@@ -5,7 +5,7 @@ charset-normalizer==3.4.1
 crypto==1.4.1
 cryptography==44.0.2
 docutils==0.21.2
--e git+ssh://git@github.com/LarryMatrix/govesb.git@4c3aa6a6b3c95b20f65b9221fafa163091694167#egg=govesb
+#-e git+ssh://git@github.com/LarryMatrix/govesb.git@4c3aa6a6b3c95b20f65b9221fafa163091694167#egg=govesb
 id==1.5.0
 idna==3.10
 jaraco.classes==3.4.0
