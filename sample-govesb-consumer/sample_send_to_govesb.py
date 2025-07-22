@@ -1,7 +1,6 @@
 from govesb.esb import (
     DataFormatEnum, ESBHelper
 )
-import requests
 
 destination_scheme = "https"
 destination_host = "jsonplaceholder.typicode.com"
