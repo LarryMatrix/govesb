@@ -1,4 +1,4 @@
-from govesb.govesb import GovEsbHelper
+from govesb import GovEsbHelper
 import requests
 
 destination_scheme = "https"

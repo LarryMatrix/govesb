@@ -1,4 +1,4 @@
-from govesb.esb import (
+from govesb import (
     DataFormatEnum, ESBHelper
 )
 

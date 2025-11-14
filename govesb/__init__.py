@@ -2,8 +2,7 @@
 # from .services.esb_helper import
 # from .services.esb_helper2 import
 
-from govesb.esb import (
+from govesb.v2.esb_v2 import (
     ECC, RSAHelper, DataFormatEnum, ModeOfConnection, TokenResponse, CryptoData, ESBRequest, ESBResponse,
-    RequestData, ResponseData, DataFormatEnum, ESBParameterDto, CryptoConfig, GovESBTokenService, ESBHelper
+    RequestData, ResponseData, ESBParameterDto, CryptoConfig, GovESBTokenService, ESBHelper
 )
-from govesb.govesb import GovEsbHelper

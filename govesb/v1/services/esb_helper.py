@@ -6,16 +6,15 @@ from typing import TypeVar, Generic, Optional
 from xml.etree import ElementTree as ET
 from dataclasses import asdict
 
-from govesb.crypto.ecc import ECC
-from govesb.crypto.rsa import RSAHelper
-from govesb.services.token_service import GovESBTokenService
-from govesb.models.data import (
-    TokenResponse, CryptoData, ESBRequest, ESBResponse,
-    RequestData, ResponseData
+from govesb.v1.crypto.ecc import ECC
+from govesb.v1.services.token_service import GovESBTokenService
+from govesb.v1.models.data import (
+    CryptoData, ESBRequest, ESBResponse,
+    ResponseData
 )
 
-from govesb.models.enums import DataFormatEnum, ModeOfConnection
-from govesb.utils.json_fixer import JsonFixer
+from govesb.v1.models.enums import DataFormatEnum, ModeOfConnection
+from govesb.v1.utils.json_fixer import JsonFixer
 
 logger = logging.getLogger(__name__)
 T = TypeVar("T")
